@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Table(name = "tb_patients")
@@ -27,4 +28,10 @@ public class PatientModel implements Serializable {
     private String email;
     @Column(name = "address", nullable = false)
     private String address;
+
+    @OneToMany(mappedBy = "patient", fetch = FetchType.LAZY)
+    private Set<AppointmentModel> appointments;
+
+    @OneToMany(mappedBy = "patient", fetch = FetchType.LAZY)
+    private Set<PrescriptionModel> prescriptions;
 }

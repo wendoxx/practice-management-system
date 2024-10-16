@@ -35,4 +35,8 @@ public class DoctorModel implements Serializable {
 
     @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY)
     private Set<AppointmentModel> appointments;
+
+    @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY)
+    private Set<PrescriptionModel> prescriptions;
+
 }

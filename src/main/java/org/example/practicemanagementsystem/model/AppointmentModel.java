@@ -22,11 +22,18 @@ public class AppointmentModel implements Serializable {
     @Column(name = "date", nullable = false)
     private LocalDateTime date = LocalDateTime.now();
 
-    @Column(name = "content", nullable = false)
-    private String content;
+    @Column(name = "description", nullable = false)
+    private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doctor")
-    private DoctorModel doctorName;
-    
+    private DoctorModel doctor;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "patient")
+    private PatientModel patient;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "prescription")
+    private PrescriptionModel prescription;
 }
