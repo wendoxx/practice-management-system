@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "tb_apointments")
+@Table(name = "tb_appointments")
 @Data
 @EqualsAndHashCode(of = "id")
 public class AppointmentModel implements Serializable {
