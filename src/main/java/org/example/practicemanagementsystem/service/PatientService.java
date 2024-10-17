@@ -3,12 +3,13 @@ package org.example.practicemanagementsystem.service;
 import lombok.AllArgsConstructor;
 import org.example.practicemanagementsystem.dto.request.PatientRequestDTO;
 import org.example.practicemanagementsystem.dto.response.PatientResponseDTO;
-import org.example.practicemanagementsystem.mapper.Mapper;
 import org.example.practicemanagementsystem.model.PatientModel;
 import org.example.practicemanagementsystem.repository.PatientRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -21,7 +22,7 @@ public class PatientService {
     private final ModelMapper modelMapper;
 
     // this method is used to create and update patient
-    public PatientResponseDTO createAndUpdatePatient(PatientRequestDTO patientRequestDTO){
+    public PatientResponseDTO createAndUpdatePatient(PatientRequestDTO patientRequestDTO) {
         PatientModel patient;
 
         if(patientRequestDTO.getId() != null && patientRepository.existsById(patientRequestDTO.getId())){
@@ -45,4 +46,9 @@ public class PatientService {
                 .orElseThrow(() -> new RuntimeException("Patient not found")), PatientResponseDTO.class);
     }
 
+    public List<PatientResponseDTO> getAllPatients() {
+        return patientRepository.findAll().stream()
+                .map(patient -> modelMapper.map(patient, PatientResponseDTO.class))
+                .toList();
+    }
 }
