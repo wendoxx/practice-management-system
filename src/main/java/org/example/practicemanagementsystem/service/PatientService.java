@@ -30,9 +30,13 @@ public class PatientService {
         PatientModel patient;
 
         if(patientRequestDTO.getId() != null && patientRepository.existsById(patientRequestDTO.getId())){
+            LOGGER.info("Updating patient...");
             patient = patientRepository.findById(patientRequestDTO.getId()).get();
+            LOGGER.info("Patient found: " + patient);
         } else {
+            LOGGER.info("Creating patient...");
             patient = new PatientModel();
+            LOGGER.info("Patient created: " + patient);
         }
 
         patient.setName(patientRequestDTO.getName());
@@ -58,12 +62,24 @@ public class PatientService {
 
     // this method is used to get patient by id
     public PatientResponseDTO getPatientById(Long id) {
+        LOGGER.info("Getting patient...");
         return modelMapper.map(patientRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Patient not found")), PatientResponseDTO.class);
+                .orElseThrow(() -> {
+                    LOGGER.error("Patient not found.");
+                    return new RuntimeException("Patient not found.");
+                }), PatientResponseDTO.class);
+
     }
 
     // this method is used to get all patients
     public List<PatientResponseDTO> getAllPatients() {
+        LOGGER.info("Getting all patients...");
+
+        if (patientRepository.findAll().isEmpty()) {
+            LOGGER.error("No patients found.");
+            throw new RuntimeException("No patients found.");
+        }
+
         return patientRepository.findAll().stream()
                 .map(patient -> modelMapper.map(patient, PatientResponseDTO.class))
                 .toList();
@@ -71,6 +87,11 @@ public class PatientService {
 
     // this method is used to delete patient by id
     public void deletePatient(Long id) {
+
+        if (patientRepository.findById(id).isEmpty()) {
+            LOGGER.error("Patient not found.");
+            throw new RuntimeException("Patient not found.");
+        }
         patientRepository.deleteById(id);
     }
 }
