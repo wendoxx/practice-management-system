@@ -8,5 +8,6 @@ public class PrescriptionResponseDTO {
     private PatientResponseDTO patient;
     private DoctorResponseDTO doctor;
     private AppointmentResponseDTO appointment;
+    private String content;
 }
 //criar os services e ver se será necessário implementar um mapper
