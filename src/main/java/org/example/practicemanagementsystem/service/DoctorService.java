@@ -86,5 +86,12 @@ public class DoctorService {
 
     }
 
-
+    public void deleteDoctorById(Long id){
+        LOGGER.info("Deleting doctor...");
+        if (doctorRepository.findById(id).isEmpty()){
+            LOGGER.error("Doctor not found.");
+            throw new RuntimeException("Doctor not found. Check the id.");
+        }
+        doctorRepository.deleteById(id);
+    }
 }
