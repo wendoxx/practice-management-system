@@ -38,8 +38,8 @@ public class DoctorService {
 
         doctor.setName(doctorRequestDTO.getName());
         doctor.setEmail(doctorRequestDTO.getEmail());
-        doctor.setPhone(doctor.getPhone());
-        doctor.setSpecialization(doctor.getSpecialization());
+        doctor.setPhone(doctorRequestDTO.getPhone());
+        doctor.setSpecialization(doctorRequestDTO.getSpecialization());
 
         return modelMapper.map(doctorRepository.save(doctor), DoctorResponseDTO.class);
     }
