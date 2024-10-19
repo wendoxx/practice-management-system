@@ -58,11 +58,24 @@ public class DoctorService {
 
     //This method list find a doctor by id
     public DoctorResponseDTO getDoctorById(Long id){
+        LOGGER.info("Getting doctor...");
         return modelMapper.map(doctorRepository.findById(id)
                 .orElseThrow(() -> {
                     LOGGER.error("Doctor not found.");
                     return new RuntimeException("Doctor not found. Please, check the id.");
                 }), DoctorResponseDTO.class);
+    }
+
+    public DoctorResponseDTO getDoctorByName(String name) {
+        LOGGER.info("Getting doctor...");
+        DoctorModel doctor = modelMapper.map(doctorRepository.findByName(name), DoctorModel.class);
+
+        if (doctor == null) {
+            throw new RuntimeException("Doctor not found.");
+        }
+
+        return modelMapper.map(doctor, DoctorResponseDTO.class);
+
     }
 
 
