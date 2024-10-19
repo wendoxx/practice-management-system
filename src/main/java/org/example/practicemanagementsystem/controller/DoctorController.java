@@ -21,13 +21,13 @@ public class DoctorController {
         return ResponseEntity.ok(doctorService.getAllDoctors().stream().toList());
     }
     @GetMapping("/name")
-    public String findDoctorByName(){
-        return "ByName";
+    public ResponseEntity<DoctorResponseDTO> findDoctorByName(@RequestParam String name){
+        return ResponseEntity.ok(doctorService.getDoctorByName(name));
     }
 
     @GetMapping("/{id}")
-    public String findDoctorById() {
-        return "Doctor with id ";
+    public ResponseEntity<DoctorResponseDTO> findDoctorById(@PathVariable Long id) {
+        return ResponseEntity.ok(doctorService.getDoctorById(id));
     }
 
     @PostMapping
@@ -36,12 +36,13 @@ public class DoctorController {
     }
 
     @PutMapping
-    public String updateDoctor() {
-        return "Doctor updated";
+    public ResponseEntity<DoctorResponseDTO> updateDoctor(@RequestBody DoctorRequestDTO doctorRequestDTO) {
+        return ResponseEntity.status(201).body(doctorService.updateDoctor(doctorRequestDTO));
     }
 
     @DeleteMapping("/{id}")
-    public String deleteDoctor() {
-        return "Doctor deleted";
+    public ResponseEntity<DoctorResponseDTO> deleteDoctor(@PathVariable Long id) {
+        doctorService.deleteDoctorById(id);
+        return ResponseEntity.noContent().build();
     }
 }
