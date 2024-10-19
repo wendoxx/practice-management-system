@@ -44,6 +44,14 @@ public class DoctorService {
         return modelMapper.map(doctorRepository.save(doctor), DoctorResponseDTO.class);
     }
 
+    public DoctorResponseDTO saveDoctor(DoctorRequestDTO doctorRequestDTO) {
+        return createAndUpdateDoctor(doctorRequestDTO);
+    }
+
+    public DoctorResponseDTO updateDoctor(DoctorRequestDTO doctorRequestDTO) {
+        return createAndUpdateDoctor(doctorRequestDTO);
+    }
+
     //This method lists all doctors
     public List<DoctorResponseDTO> getAllDoctors(){
 
