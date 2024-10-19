@@ -36,6 +36,8 @@ public class DoctorService {
             doctor = new DoctorModel();
         }
 
+        //TODO: add method to validate email.
+        
         doctor.setName(doctorRequestDTO.getName());
         doctor.setEmail(doctorRequestDTO.getEmail());
         doctor.setPhone(doctorRequestDTO.getPhone());
