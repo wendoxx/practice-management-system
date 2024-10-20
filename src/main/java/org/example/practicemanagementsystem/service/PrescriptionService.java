@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.example.practicemanagementsystem.dto.request.PrescriptionRequestDTO;
+import org.example.practicemanagementsystem.dto.response.PatientResponseDTO;
+import org.example.practicemanagementsystem.dto.response.PrescriptionResponseDTO;
 import org.example.practicemanagementsystem.model.DoctorModel;
 import org.example.practicemanagementsystem.model.PatientModel;
 import org.example.practicemanagementsystem.model.PrescriptionModel;
@@ -14,7 +16,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -65,5 +67,19 @@ public class PrescriptionService {
         return prescriptionRepository.save(prescription);
     }
 
+    public List<PrescriptionResponseDTO> findAll() {
+        LOGGER.info("Finding prescriptions...");
+        return prescriptionRepository.findAll()
+                .stream()
+                .map(prescription -> modelMapper.map(prescription, PrescriptionResponseDTO.class)).toList();
+    }
+
+    public PrescriptionResponseDTO findPrescriptionById(Long id) {
+        LOGGER.info("Finding prescription...");
+        return modelMapper.map(prescriptionRepository.findById(id).orElseThrow(() -> {
+            LOGGER.error("Prescription not found.");
+            return new RuntimeException("Prescription not found.");
+        }), PrescriptionResponseDTO.class);
+    }
 
 }
