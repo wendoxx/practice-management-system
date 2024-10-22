@@ -3,8 +3,9 @@ package org.example.practicemanagementsystem.service;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.example.practicemanagementsystem.dto.request.DoctorRequestDTO;
+import org.example.practicemanagementsystem.dto.request.PatientRequestDTO;
 import org.example.practicemanagementsystem.dto.request.PrescriptionRequestDTO;
-import org.example.practicemanagementsystem.dto.response.PatientResponseDTO;
 import org.example.practicemanagementsystem.dto.response.PrescriptionResponseDTO;
 import org.example.practicemanagementsystem.model.DoctorModel;
 import org.example.practicemanagementsystem.model.PatientModel;
@@ -82,4 +83,20 @@ public class PrescriptionService {
         }), PrescriptionResponseDTO.class);
     }
 
+    public List<PrescriptionResponseDTO> findAllByPatient(PatientRequestDTO patientRequestDTO) {
+        PatientModel patient = patientRepository.findById(patientRequestDTO.getId()).orElseThrow(() -> {
+            LOGGER.error("Patient not found.");
+            return new RuntimeException("Patient not found");
+        });
+        return modelMapper.map(prescriptionRepository.findByPatient(patient), List.class);
+    }
+
+    public List<PrescriptionResponseDTO> findAllByDoctor(DoctorRequestDTO doctorRequestDTO) {
+        DoctorModel doctor = doctorRepository.findById(doctorRequestDTO.getId()).orElseThrow(() -> {
+            LOGGER.error("Doctor not found.");
+            return new RuntimeException("Doctor not found.");
+        });
+
+        return modelMapper.map(prescriptionRepository.findByDoctor(doctor), List.class);
+    }
 }
