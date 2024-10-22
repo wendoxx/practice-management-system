@@ -32,4 +32,9 @@ public class PrescriptionController {
         return ResponseEntity.ok(prescriptionService.findAll());
     }
 
+    @PostMapping
+    public ResponseEntity<PrescriptionResponseDTO> savePrescription(@RequestBody PrescriptionRequestDTO patientRequestDTO) {
+        return ResponseEntity.status(201).body(prescriptionService.savePrescription(patientRequestDTO));
+    }
+
 }
