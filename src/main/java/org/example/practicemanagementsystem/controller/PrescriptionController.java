@@ -1,7 +1,9 @@
 package org.example.practicemanagementsystem.controller;
 
+import org.example.practicemanagementsystem.dto.request.DoctorRequestDTO;
 import org.example.practicemanagementsystem.dto.request.PatientRequestDTO;
 import org.example.practicemanagementsystem.dto.request.PrescriptionRequestDTO;
+import org.example.practicemanagementsystem.dto.response.DoctorResponseDTO;
 import org.example.practicemanagementsystem.dto.response.PrescriptionResponseDTO;
 import org.example.practicemanagementsystem.service.PrescriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +24,16 @@ public class PrescriptionController {
         return ResponseEntity.ok(prescriptionService.findPrescriptionById(id));
     }
 
-    @GetMapping("/name")
+    @GetMapping("/byPatient")
     public ResponseEntity<List<PrescriptionResponseDTO>> getByPatient(@RequestBody PatientRequestDTO patientRequestDTO){
         return ResponseEntity.ok(prescriptionService.findAllByPatient(patientRequestDTO));
     }
 
+    @GetMapping("/ByDoctor")
+    public ResponseEntity<List<PrescriptionResponseDTO>> getByDoctor(@RequestBody DoctorRequestDTO doctorRequestDTO) {
+        return ResponseEntity.ok(prescriptionService.findAllByDoctor(doctorRequestDTO));
+    }
+    
     @GetMapping("/all")
     public ResponseEntity<List<PrescriptionResponseDTO>> getAll(){
         return ResponseEntity.ok(prescriptionService.findAll());
