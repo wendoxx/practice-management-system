@@ -3,7 +3,6 @@ package org.example.practicemanagementsystem.controller;
 import org.example.practicemanagementsystem.dto.request.DoctorRequestDTO;
 import org.example.practicemanagementsystem.dto.request.PatientRequestDTO;
 import org.example.practicemanagementsystem.dto.request.PrescriptionRequestDTO;
-import org.example.practicemanagementsystem.dto.response.DoctorResponseDTO;
 import org.example.practicemanagementsystem.dto.response.PrescriptionResponseDTO;
 import org.example.practicemanagementsystem.service.PrescriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
