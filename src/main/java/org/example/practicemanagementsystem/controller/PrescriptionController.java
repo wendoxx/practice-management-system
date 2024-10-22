@@ -1,10 +1,14 @@
 package org.example.practicemanagementsystem.controller;
 
+import org.example.practicemanagementsystem.dto.request.PatientRequestDTO;
+import org.example.practicemanagementsystem.dto.request.PrescriptionRequestDTO;
+import org.example.practicemanagementsystem.dto.response.PrescriptionResponseDTO;
 import org.example.practicemanagementsystem.service.PrescriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/prescriptions")
@@ -13,19 +17,19 @@ public class PrescriptionController {
     @Autowired
     private PrescriptionService prescriptionService;
 
-    @GetMapping
-    public String findById(){
-        return "find by id";
+    @GetMapping("/{id}")
+    public ResponseEntity<PrescriptionResponseDTO> getById(@PathVariable Long id){
+        return ResponseEntity.ok(prescriptionService.findPrescriptionById(id));
     }
 
-    @GetMapping
-    public String findByName(){
-        return "find by name";
+    @GetMapping("/name")
+    public ResponseEntity<List<PrescriptionResponseDTO>> getByPatient(@RequestBody PatientRequestDTO patientRequestDTO){
+        return ResponseEntity.ok(prescriptionService.findAllByPatient(patientRequestDTO));
     }
 
     @GetMapping("/all")
-    public String findAll(){
-        return "find all";
+    public ResponseEntity<List<PrescriptionResponseDTO>> getAll(){
+        return ResponseEntity.ok(prescriptionService.findAll());
     }
 
 }
