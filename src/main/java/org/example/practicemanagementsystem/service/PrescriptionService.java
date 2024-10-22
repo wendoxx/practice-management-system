@@ -66,7 +66,7 @@ public class PrescriptionService {
 
         return modelMapper.map(prescriptionRepository.save(prescription), PrescriptionResponseDTO.class);
     }
-    
+
     public PrescriptionResponseDTO savePrescription(PrescriptionRequestDTO prescriptionRequestDTO) {
         return saveAndUpdatePrescription(prescriptionRequestDTO);
     }
@@ -105,5 +105,10 @@ public class PrescriptionService {
         });
 
         return modelMapper.map(prescriptionRepository.findByDoctor(doctor), List.class);
+    }
+
+    public void deletePrescriptionById(Long id) {
+        LOGGER.info("Deleting prescription...");
+        prescriptionRepository.deleteById(id);
     }
 }
