@@ -29,16 +29,15 @@ public class PrescriptionService {
     @Autowired
     private ModelMapper modelMapper;
 
-    private static final Logger LOGGER = LogManager.getLogger(PrescriptionService.class);
-
     @Autowired
     private DoctorRepository doctorRepository;
 
     @Autowired
     PatientRepository patientRepository;
 
+    private static final Logger LOGGER = LogManager.getLogger(PrescriptionService.class);
 
-    public PrescriptionModel createPrescription(PrescriptionRequestDTO prescriptionRequestDTO) {
+    public PrescriptionResponseDTO saveAndUpdatePrescription(PrescriptionRequestDTO prescriptionRequestDTO) {
         PrescriptionModel prescription;
 
         if (prescriptionRequestDTO.getId() != null && prescriptionRepository.existsById(prescriptionRequestDTO.getId())) {
@@ -65,7 +64,7 @@ public class PrescriptionService {
         prescription.setDoctor(doctor);
         prescription.setContent(prescriptionRequestDTO.getContent());
 
-        return prescriptionRepository.save(prescription);
+        return modelMapper.map(prescriptionRepository.save(prescription), PrescriptionResponseDTO.class);
     }
 
     public List<PrescriptionResponseDTO> findAll() {
