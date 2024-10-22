@@ -37,4 +37,15 @@ public class PrescriptionController {
         return ResponseEntity.status(201).body(prescriptionService.savePrescription(patientRequestDTO));
     }
 
+    @PutMapping
+    public ResponseEntity<PrescriptionResponseDTO> updatePrescription(@RequestBody PrescriptionRequestDTO prescriptionRequestDTO) {
+        return ResponseEntity.status(201).body(prescriptionService.updatePrescription(prescriptionRequestDTO));
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<PrescriptionResponseDTO> deletePrescription(@PathVariable Long id) {
+        prescriptionService.deletePrescriptionById(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }
