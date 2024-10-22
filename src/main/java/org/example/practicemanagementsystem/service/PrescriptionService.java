@@ -66,6 +66,14 @@ public class PrescriptionService {
 
         return modelMapper.map(prescriptionRepository.save(prescription), PrescriptionResponseDTO.class);
     }
+    
+    public PrescriptionResponseDTO savePrescription(PrescriptionRequestDTO prescriptionRequestDTO) {
+        return saveAndUpdatePrescription(prescriptionRequestDTO);
+    }
+
+    public PrescriptionResponseDTO updatePrescription(PrescriptionRequestDTO prescriptionRequestDTO) {
+        return saveAndUpdatePrescription(prescriptionRequestDTO);
+    }
 
     public List<PrescriptionResponseDTO> findAll() {
         LOGGER.info("Finding prescriptions...");
