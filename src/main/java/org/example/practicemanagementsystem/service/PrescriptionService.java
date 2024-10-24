@@ -2,6 +2,7 @@ package org.example.practicemanagementsystem.service;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.example.practicemanagementsystem.dto.request.DoctorRequestDTO;
@@ -19,9 +20,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
+@NoArgsConstructor
 public class PrescriptionService {
 
     @Autowired
@@ -70,10 +73,12 @@ public class PrescriptionService {
         return modelMapper.map(prescription, PrescriptionResponseDTO.class);
     }
 
+    @Transactional
     public PrescriptionResponseDTO savePrescription(PrescriptionRequestDTO prescriptionRequestDTO) {
         return saveAndUpdatePrescription(prescriptionRequestDTO);
     }
 
+    @Transactional
     public PrescriptionResponseDTO updatePrescription(PrescriptionRequestDTO prescriptionRequestDTO) {
         return saveAndUpdatePrescription(prescriptionRequestDTO);
     }
@@ -92,22 +97,26 @@ public class PrescriptionService {
             return new RuntimeException("Prescription not found.");
         }), PrescriptionResponseDTO.class);
     }
-
+    //TODO: do this method return patient, appointment and prescription in JSON.
     public List<PrescriptionResponseDTO> findAllByPatient(PatientRequestDTO patientRequestDTO) {
         PatientModel patient = patientRepository.findById(patientRequestDTO.getId()).orElseThrow(() -> {
             LOGGER.error("Patient not found.");
             return new RuntimeException("Patient not found");
         });
-        return modelMapper.map(prescriptionRepository.findByPatient(patient), List.class);
-    }
+        Optional<PrescriptionModel> prescriptions = prescriptionRepository.findByPatient(patient);
 
+        return prescriptions.stream().map(prescription -> modelMapper.map(patient, PrescriptionResponseDTO.class)).toList();
+    }
+    //TODO: do this method return patient, appointment and prescription in JSON.
     public List<PrescriptionResponseDTO> findAllByDoctor(DoctorRequestDTO doctorRequestDTO) {
         DoctorModel doctor = doctorRepository.findById(doctorRequestDTO.getId()).orElseThrow(() -> {
             LOGGER.error("Doctor not found.");
             return new RuntimeException("Doctor not found.");
         });
 
-        return modelMapper.map(prescriptionRepository.findByDoctor(doctor), List.class);
+        Optional<PrescriptionModel> prescriptions = prescriptionRepository.findByDoctor(doctor);
+
+        return prescriptions.stream().map(prescription -> modelMapper.map(doctor, PrescriptionResponseDTO.class)).toList();
     }
 
     public void deletePrescriptionById(Long id) {
