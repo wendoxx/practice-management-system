@@ -15,6 +15,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class AppointmentService {
@@ -67,5 +69,11 @@ public class AppointmentService {
 
     public AppointmentResponseDTO updateAppointment(AppointmentRequestDTO appointmentRequestDTO) {
         return saveAndUpdateAppointment(appointmentRequestDTO);
+    }
+
+    public List<AppointmentResponseDTO> findAllAppointments() {
+        return appointmentRepository.findAll()
+                .stream()
+                .map(appointment -> modelMapper.map(appointment, AppointmentResponseDTO.class)).toList();
     }
 }
