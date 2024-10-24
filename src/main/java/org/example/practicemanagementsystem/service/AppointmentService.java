@@ -102,6 +102,13 @@ public class AppointmentService {
         return appointments.stream().map(appointment -> modelMapper.map(patient, AppointmentResponseDTO.class)).toList();
     }
 
+    public AppointmentResponseDTO findAppointmentById(Long id) {
+        return modelMapper.map(appointmentRepository.findById(id).orElseThrow(() -> {
+         LOGGER.error("Appointment not found.");
+         return new RuntimeException("Appointment not found");
+        }), AppointmentResponseDTO.class);
+    }
+
     public void deleteAppointment(Long id) {
         appointmentRepository.deleteById(id);
     }
