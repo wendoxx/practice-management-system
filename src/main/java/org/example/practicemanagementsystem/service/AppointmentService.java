@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.example.practicemanagementsystem.dto.request.AppointmentRequestDTO;
+import org.example.practicemanagementsystem.dto.request.DoctorRequestDTO;
+import org.example.practicemanagementsystem.dto.request.PatientRequestDTO;
 import org.example.practicemanagementsystem.dto.response.AppointmentResponseDTO;
 import org.example.practicemanagementsystem.model.AppointmentModel;
 import org.example.practicemanagementsystem.model.DoctorModel;
@@ -15,6 +17,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.StyleSheet;
 import java.util.List;
 
 @Service
@@ -53,7 +56,7 @@ public class AppointmentService {
         appointment.setDoctor(doctor);
 
         PatientModel patient = patientRepository.findById(appointmentRequestDTO.getPatient()).orElseThrow(() -> {
-            LOGGER.info("Patient not found.");
+            LOGGER.error("Patient not found.");
             return new RuntimeException("Patient not found");
         });
         appointment.setPatient(patient);
@@ -75,5 +78,21 @@ public class AppointmentService {
         return appointmentRepository.findAll()
                 .stream()
                 .map(appointment -> modelMapper.map(appointment, AppointmentResponseDTO.class)).toList();
+    }
+
+    public List<AppointmentResponseDTO> findAppointmentsByDoctor(AppointmentRequestDTO appointmentRequestDTO) {
+        DoctorModel doctor = doctorRepository.findById(appointmentRequestDTO.getId()).orElseThrow(() -> {
+           LOGGER.error("Doctor not found.");
+           return new RuntimeException("Doctor not found.");
+        });
+        return modelMapper.map(appointmentRepository.findAllByDoctor(doctor), List.class);
+    }
+
+    public List<AppointmentResponseDTO> findAppointmentsByPatient(AppointmentResponseDTO appointmentResponseDTO) {
+        PatientModel patient = patientRepository.findById(appointmentResponseDTO.getId()).orElseThrow(() -> {
+            LOGGER.error("Patient not found.");
+            return new RuntimeException("Patient not found");
+        });
+        return modelMapper.map(appointmentRepository.findAllByPatient(patient), List.class);
     }
 }
