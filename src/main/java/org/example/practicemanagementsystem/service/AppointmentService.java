@@ -81,6 +81,7 @@ public class AppointmentService {
     }
 
     public List<AppointmentResponseDTO> findAppointmentsByDoctor(DoctorRequestDTO doctorRequestDTO) {
+        LOGGER.info("Finding appointment...");
         DoctorModel doctor = doctorRepository.findById(doctorRequestDTO.getId()).orElseThrow(() -> {
            LOGGER.error("Doctor not found.");
            return new RuntimeException("Doctor not found.");
@@ -91,6 +92,7 @@ public class AppointmentService {
     }
 
     public List<AppointmentResponseDTO> findAppointmentsByPatient(PatientRequestDTO patientRequestDTO) {
+        LOGGER.info("Finding appointment...");
         PatientModel patient = patientRepository.findById(patientRequestDTO.getId()).orElseThrow(() -> {
             LOGGER.error("Patient not found.");
             return new RuntimeException("Patient not found");
@@ -99,4 +101,9 @@ public class AppointmentService {
         Optional<AppointmentModel> appointments = appointmentRepository.findAllByPatient(patient);
         return appointments.stream().map(appointment -> modelMapper.map(patient, AppointmentResponseDTO.class)).toList();
     }
+
+    public void deleteAppointment(Long id) {
+        appointmentRepository.deleteById(id);
+    }
+
 }
