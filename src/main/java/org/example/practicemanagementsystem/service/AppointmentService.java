@@ -15,8 +15,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 @AllArgsConstructor
 public class AppointmentService {
@@ -27,18 +25,22 @@ public class AppointmentService {
     @Autowired
     private final ModelMapper modelMapper;
 
-    private static final Logger LOGGER = LogManager.getLogger(AppointmentService.class);
     @Autowired
     private DoctorRepository doctorRepository;
+
     @Autowired
     private PatientRepository patientRepository;
+
+    private static final Logger LOGGER = LogManager.getLogger(AppointmentService.class);
 
     public AppointmentResponseDTO saveAndUpdateAppointment(AppointmentRequestDTO appointmentRequestDTO) {
         AppointmentModel appointment;
 
         if (appointmentRequestDTO.getId() != null && appointmentRepository.existsById(appointmentRequestDTO.getId())) {
+            LOGGER.info("Updating appointment...");
             appointment = appointmentRepository.findById(appointmentRequestDTO.getId()).get();
         } else {
+            LOGGER.info("Saving new appointment...");
             appointment = new AppointmentModel();
         }
 
@@ -57,5 +59,13 @@ public class AppointmentService {
         appointment = appointmentRepository.save(appointment);
 
         return modelMapper.map(appointment, AppointmentResponseDTO.class);
+    }
+
+    public AppointmentResponseDTO saveAppointment(AppointmentRequestDTO appointmentRequestDTO) {
+       return saveAndUpdateAppointment(appointmentRequestDTO);
+    }
+
+    public AppointmentResponseDTO updateAppointment(AppointmentRequestDTO appointmentRequestDTO) {
+        return saveAndUpdateAppointment(appointmentRequestDTO);
     }
 }
