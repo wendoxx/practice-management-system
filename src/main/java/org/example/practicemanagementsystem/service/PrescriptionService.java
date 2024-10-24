@@ -1,5 +1,6 @@
 package org.example.practicemanagementsystem.service;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -37,6 +38,7 @@ public class PrescriptionService {
 
     private static final Logger LOGGER = LogManager.getLogger(PrescriptionService.class);
 
+    @Transactional
     public PrescriptionResponseDTO saveAndUpdatePrescription(PrescriptionRequestDTO prescriptionRequestDTO) {
         PrescriptionModel prescription;
 
@@ -50,21 +52,22 @@ public class PrescriptionService {
             LOGGER.info("Prescription saved!");
         }
 
-        DoctorModel doctor = (doctorRepository.findById(prescriptionRequestDTO.getId())).orElseThrow(() -> {
+        DoctorModel doctor = (doctorRepository.findById(prescriptionRequestDTO.getDoctor())).orElseThrow(() -> {
             LOGGER.error("Doctor not found.");
             return new RuntimeException("Doctor not found.");
-        });
 
-        PatientModel patient = (patientRepository.findById(prescriptionRequestDTO.getId())).orElseThrow(() -> {
+        });
+        prescription.setDoctor(doctor);
+
+        PatientModel patient = (patientRepository.findById(prescriptionRequestDTO.getPatient())).orElseThrow(() -> {
             LOGGER.error("Patient not found");
             return new RuntimeException("Patient not found.");
         });
-
         prescription.setPatient(patient);
-        prescription.setDoctor(doctor);
         prescription.setContent(prescriptionRequestDTO.getContent());
 
-        return modelMapper.map(prescriptionRepository.save(prescription), PrescriptionResponseDTO.class);
+        prescription = prescriptionRepository.save(prescription);
+        return modelMapper.map(prescription, PrescriptionResponseDTO.class);
     }
 
     public PrescriptionResponseDTO savePrescription(PrescriptionRequestDTO prescriptionRequestDTO) {
