@@ -17,8 +17,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.StyleSheet;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -80,19 +80,23 @@ public class AppointmentService {
                 .map(appointment -> modelMapper.map(appointment, AppointmentResponseDTO.class)).toList();
     }
 
-    public List<AppointmentResponseDTO> findAppointmentsByDoctor(AppointmentRequestDTO appointmentRequestDTO) {
-        DoctorModel doctor = doctorRepository.findById(appointmentRequestDTO.getId()).orElseThrow(() -> {
+    public List<AppointmentResponseDTO> findAppointmentsByDoctor(DoctorRequestDTO doctorRequestDTO) {
+        DoctorModel doctor = doctorRepository.findById(doctorRequestDTO.getId()).orElseThrow(() -> {
            LOGGER.error("Doctor not found.");
            return new RuntimeException("Doctor not found.");
         });
-        return modelMapper.map(appointmentRepository.findAllByDoctor(doctor), List.class);
+
+        Optional<AppointmentModel> appointments = appointmentRepository.findAllByDoctor(doctor);
+        return appointments.stream().map(appointment -> modelMapper.map(doctor, AppointmentResponseDTO.class)).toList();
     }
 
-    public List<AppointmentResponseDTO> findAppointmentsByPatient(AppointmentResponseDTO appointmentResponseDTO) {
-        PatientModel patient = patientRepository.findById(appointmentResponseDTO.getId()).orElseThrow(() -> {
+    public List<AppointmentResponseDTO> findAppointmentsByPatient(PatientRequestDTO patientRequestDTO) {
+        PatientModel patient = patientRepository.findById(patientRequestDTO.getId()).orElseThrow(() -> {
             LOGGER.error("Patient not found.");
             return new RuntimeException("Patient not found");
         });
-        return modelMapper.map(appointmentRepository.findAllByPatient(patient), List.class);
+
+        Optional<AppointmentModel> appointments = appointmentRepository.findAllByPatient(patient);
+        return appointments.stream().map(appointment -> modelMapper.map(patient, AppointmentResponseDTO.class)).toList();
     }
 }
