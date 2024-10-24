@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/prescriptions")
+@RequestMapping("/api/v1/prescription")
 public class PrescriptionController {
 
     @Autowired
@@ -39,8 +39,8 @@ public class PrescriptionController {
     }
 
     @PostMapping
-    public ResponseEntity<PrescriptionResponseDTO> savePrescription(@RequestBody PrescriptionRequestDTO patientRequestDTO) {
-        return ResponseEntity.status(201).body(prescriptionService.savePrescription(patientRequestDTO));
+    public ResponseEntity<PrescriptionResponseDTO> savePrescription(@RequestBody PrescriptionRequestDTO prescriptionRequestDTO) {
+        return ResponseEntity.status(201).body(prescriptionService.savePrescription(prescriptionRequestDTO));
     }
 
     @PutMapping
