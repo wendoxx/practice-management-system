@@ -60,6 +60,8 @@ public class AppointmentService {
             return new RuntimeException("Patient not found");
         });
         appointment.setPatient(patient);
+        appointment.setDescription(appointmentRequestDTO.getDescription());
+        appointment.setDate(appointmentRequestDTO.getDate());
 
         appointment = appointmentRepository.save(appointment);
 
@@ -88,7 +90,7 @@ public class AppointmentService {
         });
 
         Optional<AppointmentModel> appointments = appointmentRepository.findAllByDoctor(doctor);
-        return appointments.stream().map(appointment -> modelMapper.map(doctor, AppointmentResponseDTO.class)).toList();
+        return appointments.stream().map(appointment -> modelMapper.map(appointment, AppointmentResponseDTO.class)).toList();
     }
 
     public List<AppointmentResponseDTO> findAppointmentsByPatient(PatientRequestDTO patientRequestDTO) {
@@ -99,7 +101,7 @@ public class AppointmentService {
         });
 
         Optional<AppointmentModel> appointments = appointmentRepository.findAllByPatient(patient);
-        return appointments.stream().map(appointment -> modelMapper.map(patient, AppointmentResponseDTO.class)).toList();
+        return appointments.stream().map(appointment -> modelMapper.map(appointment, AppointmentResponseDTO.class)).toList();
     }
 
     public AppointmentResponseDTO findAppointmentById(Long id) {
@@ -112,5 +114,4 @@ public class AppointmentService {
     public void deleteAppointment(Long id) {
         appointmentRepository.deleteById(id);
     }
-
 }
