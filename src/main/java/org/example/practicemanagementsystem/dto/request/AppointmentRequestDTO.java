@@ -10,5 +10,5 @@ public class AppointmentRequestDTO {
     private Long doctor;
     private Long patient;
     private String description;
-    private LocalDateTime dateAndHour;
+    private LocalDateTime date;
 }
