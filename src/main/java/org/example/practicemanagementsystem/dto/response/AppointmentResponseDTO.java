@@ -11,4 +11,5 @@ public class AppointmentResponseDTO {
     private PatientResponseDTO patient;
     private LocalDateTime date;
     private String description;
+    private String prescription;
 }
