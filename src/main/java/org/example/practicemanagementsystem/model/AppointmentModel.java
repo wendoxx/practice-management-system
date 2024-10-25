@@ -19,7 +19,7 @@ public class AppointmentModel implements Serializable {
     private Long id;
 
     @Column(name = "date", nullable = false)
-    private LocalDateTime date = LocalDateTime.now();
+    private LocalDateTime date;
 
     @Column(name = "description", nullable = false)
     private String description;

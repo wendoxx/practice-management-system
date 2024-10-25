@@ -2,15 +2,18 @@ package org.example.practicemanagementsystem.service;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.example.practicemanagementsystem.dto.request.DoctorRequestDTO;
 import org.example.practicemanagementsystem.dto.request.PatientRequestDTO;
 import org.example.practicemanagementsystem.dto.request.PrescriptionRequestDTO;
 import org.example.practicemanagementsystem.dto.response.PrescriptionResponseDTO;
+import org.example.practicemanagementsystem.model.AppointmentModel;
 import org.example.practicemanagementsystem.model.DoctorModel;
 import org.example.practicemanagementsystem.model.PatientModel;
 import org.example.practicemanagementsystem.model.PrescriptionModel;
+import org.example.practicemanagementsystem.repository.AppointmentRepository;
 import org.example.practicemanagementsystem.repository.DoctorRepository;
 import org.example.practicemanagementsystem.repository.PatientRepository;
 import org.example.practicemanagementsystem.repository.PrescriptionRepository;
@@ -19,9 +22,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
+@NoArgsConstructor
 public class PrescriptionService {
 
     @Autowired
@@ -29,6 +34,9 @@ public class PrescriptionService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    AppointmentRepository appointmentRepository;
 
     @Autowired
     private DoctorRepository doctorRepository;
@@ -64,16 +72,24 @@ public class PrescriptionService {
             return new RuntimeException("Patient not found.");
         });
         prescription.setPatient(patient);
+
+        AppointmentModel appointment = (appointmentRepository.findById(prescriptionRequestDTO.getAppointment())).orElseThrow(() -> {
+            LOGGER.error("Appointment not found.");
+            return new RuntimeException("Appointment not found.");
+        });
+        prescription.setAppointment(appointment);
         prescription.setContent(prescriptionRequestDTO.getContent());
 
         prescription = prescriptionRepository.save(prescription);
         return modelMapper.map(prescription, PrescriptionResponseDTO.class);
     }
 
+    @Transactional
     public PrescriptionResponseDTO savePrescription(PrescriptionRequestDTO prescriptionRequestDTO) {
         return saveAndUpdatePrescription(prescriptionRequestDTO);
     }
 
+    @Transactional
     public PrescriptionResponseDTO updatePrescription(PrescriptionRequestDTO prescriptionRequestDTO) {
         return saveAndUpdatePrescription(prescriptionRequestDTO);
     }
@@ -98,7 +114,9 @@ public class PrescriptionService {
             LOGGER.error("Patient not found.");
             return new RuntimeException("Patient not found");
         });
-        return modelMapper.map(prescriptionRepository.findByPatient(patient), List.class);
+
+        Optional<PrescriptionModel> prescriptions = prescriptionRepository.findByPatient(patient);
+        return prescriptions.stream().map(prescription -> modelMapper.map(prescription, PrescriptionResponseDTO.class)).toList();
     }
 
     public List<PrescriptionResponseDTO> findAllByDoctor(DoctorRequestDTO doctorRequestDTO) {
@@ -107,7 +125,8 @@ public class PrescriptionService {
             return new RuntimeException("Doctor not found.");
         });
 
-        return modelMapper.map(prescriptionRepository.findByDoctor(doctor), List.class);
+        Optional<PrescriptionModel> prescriptions = prescriptionRepository.findByDoctor(doctor);
+        return prescriptions.stream().map(prescription -> modelMapper.map(prescription, PrescriptionResponseDTO.class)).toList();
     }
 
     public void deletePrescriptionById(Long id) {

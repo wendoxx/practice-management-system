@@ -6,7 +6,9 @@ import java.time.LocalDateTime;
 
 @Data
 public class AppointmentRequestDTO {
+    private Long id;
     private Long doctor;
     private Long patient;
-    private LocalDateTime dateAndHour;
+    private String description;
+    private LocalDateTime date;
 }
