@@ -24,17 +24,17 @@ public class AppointmentController {
         return ResponseEntity.ok(appointmentService.findAppointmentById(id));
     }
 
-    @GetMapping("/all-appointments")
+    @GetMapping("/all")
     public ResponseEntity<List<AppointmentResponseDTO>> getAllAppointments() {
         return ResponseEntity.ok(appointmentService.findAllAppointments());
     }
 
-    @GetMapping("/appointment-by-doctor")
+    @GetMapping("/by-doctor")
     public ResponseEntity<List<AppointmentResponseDTO>> getAppointmentsByDoctor(@RequestBody DoctorRequestDTO doctorRequestDTO) {
         return ResponseEntity.ok(appointmentService.findAppointmentsByDoctor(doctorRequestDTO));
     }
 
-    @GetMapping("/appointment-by-patient")
+    @GetMapping("/by-patient")
     public ResponseEntity<List<AppointmentResponseDTO>> getAppointmentByPatient(@RequestBody PatientRequestDTO patientRequestDTO) {
         return ResponseEntity.ok(appointmentService.findAppointmentsByPatient(patientRequestDTO));
     }

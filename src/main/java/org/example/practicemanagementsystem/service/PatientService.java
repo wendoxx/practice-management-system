@@ -71,6 +71,13 @@ public class PatientService {
 
     }
 
+    public PatientResponseDTO getPatientByName(String name) {
+        return modelMapper.map(patientRepository.findByName(name).orElseThrow(() -> {
+            LOGGER.error("Patient not found.");
+            throw new RuntimeException("Patient not found.");
+        }), PatientResponseDTO.class);
+    }
+
     // this method is used to get all patients
     public List<PatientResponseDTO> getAllPatients() {
         LOGGER.info("Getting all patients...");

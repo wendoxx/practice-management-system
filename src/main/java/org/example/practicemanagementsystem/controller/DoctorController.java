@@ -16,11 +16,11 @@ public class DoctorController {
     @Autowired
     private DoctorService doctorService;
 
-    @GetMapping("/all")
+    @GetMapping("/all-doctors")
     public ResponseEntity<List<DoctorResponseDTO>> findAllDoctors(){
         return ResponseEntity.ok(doctorService.getAllDoctors().stream().toList());
     }
-    @GetMapping("/name")
+    @GetMapping("/by-name")
     public ResponseEntity<DoctorResponseDTO> findDoctorByName(@RequestParam String name){
         return ResponseEntity.ok(doctorService.getDoctorByName(name));
     }
@@ -40,7 +40,7 @@ public class DoctorController {
         return ResponseEntity.status(201).body(doctorService.updateDoctor(doctorRequestDTO));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete-doctor/{id}")
     public ResponseEntity<DoctorResponseDTO> deleteDoctor(@PathVariable Long id) {
         doctorService.deleteDoctorById(id);
         return ResponseEntity.noContent().build();

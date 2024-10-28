@@ -26,6 +26,11 @@ public class PatientController {
         return ResponseEntity.ok(patientService.getPatientById(id));
     }
 
+    @GetMapping("/by-name")
+    public ResponseEntity<PatientResponseDTO> findPatientByName(@RequestBody String name) {
+        return ResponseEntity.ok(patientService.getPatientByName(name));
+    }
+
     @PostMapping
     public ResponseEntity<PatientResponseDTO> createPatient(@RequestBody PatientRequestDTO patientRequestDTO) {
         return ResponseEntity.status(201).body(patientService.savePatient(patientRequestDTO));
@@ -36,7 +41,7 @@ public class PatientController {
         return ResponseEntity.ok(patientService.updatePatient(patientRequestDTO));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete-patient/{id}")
     public ResponseEntity<Void> deletePatient(@PathVariable Long id) {
         patientService.deletePatient(id);
         return ResponseEntity.noContent().build();
