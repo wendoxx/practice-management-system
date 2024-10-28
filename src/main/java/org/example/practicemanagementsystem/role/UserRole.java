@@ -3,7 +3,7 @@ package org.example.practicemanagementsystem.role;
 public enum UserRole {
     ADMIN("admin"),
     DOCTOR("doctor"),
-    PATIENT("patient");
+    USER("user");
 
     private String role;
 
