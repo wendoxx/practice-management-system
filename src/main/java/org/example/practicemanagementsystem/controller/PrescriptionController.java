@@ -23,12 +23,12 @@ public class PrescriptionController {
         return ResponseEntity.ok(prescriptionService.findPrescriptionById(id));
     }
 
-    @GetMapping("/byPatient")
+    @GetMapping("/by-patient")
     public ResponseEntity<List<PrescriptionResponseDTO>> getByPatient(@RequestBody PatientRequestDTO patientRequestDTO){
         return ResponseEntity.ok(prescriptionService.findAllByPatient(patientRequestDTO));
     }
 
-    @GetMapping("/ByDoctor")
+    @GetMapping("/by-doctor")
     public ResponseEntity<List<PrescriptionResponseDTO>> getByDoctor(@RequestBody DoctorRequestDTO doctorRequestDTO) {
         return ResponseEntity.ok(prescriptionService.findAllByDoctor(doctorRequestDTO));
     }
@@ -48,7 +48,7 @@ public class PrescriptionController {
         return ResponseEntity.status(201).body(prescriptionService.updatePrescription(prescriptionRequestDTO));
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/delete-prescription/{id}")
     public ResponseEntity<PrescriptionResponseDTO> deletePrescription(@PathVariable Long id) {
         prescriptionService.deletePrescriptionById(id);
         return ResponseEntity.noContent().build();
